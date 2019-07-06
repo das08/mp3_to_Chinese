@@ -20,7 +20,7 @@ if (is_uploaded_file($_FILES["file"]["tmp_name"])) {
                 $i = $i + 1;
             }
         }
-        $mes['message'][]= "Prosess Completed.";
+        $mes['message'][]= "Process Completed.";
         header('Content-type: application/json; charset=utf-8');
         $json = json_encode($mes);
         echo $json;

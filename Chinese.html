@@ -18,155 +18,18 @@
             margin-bottom: 10px;
             font-size: 200%;
         }
-
         .wrap {
             overflow: hidden;
         }
     </style>
-    <script>
-
-
-        function sendFileToServer(formData, status) {
-            $('#error').hide();
-            $('#message').hide();
-            $('#card').hide();
-            $('#loading').show();
-            var uploadURL = "up2.php"; //Upload URL
-            var jqXHR = $.ajax({
-                url: uploadURL,
-                type: "POST",
-                contentType: false,
-                processData: false,
-                cache: false,
-                dataType: "text",
-                data: formData,
-
-                success: function (data) {
-                    
-                    $('#result').empty();
-                    $("#status").remove();
-                    var obj = $.parseJSON(data);
-                    console.log(data);
-                    var add_contents = '';
-                    if (obj.data !== undefined) {
-                        $.each(obj.data,
-                            function (index, val) {
-                                add_contents += '<p>' + val.trans + '</p>';
-                            }
-                        );
-                        $("#result").prepend("<h5>" + obj.filename + "</h5>");
-                        $('#result').append(add_contents);
-                        $('#card').show();
-                    } 
-                    if (obj.message !== undefined) {
-                        $("#message").html(obj.message);
-                        $('#message').show();
-                    }
-                    if (obj.error !== undefined) {
-                        $("#error").html(obj.error);
-                        $('#error').show();
-                    }
-                    $('#loading').hide();
-                }
-            });
-        }
-        function handleFileUpload(files, obj) {
-                var fd = new FormData();
-                fd.append('file', files[0]);
-                sendFileToServer(fd, status);
-        }
-        $(document).ready(function () {
-            var obj = $("#dragandrophandler");
-            obj.on('dragenter', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-                $(this).css('border', '2px solid #0B85A1');
-            });
-            obj.on('dragover', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
-            obj.on('drop', function (e) {
-
-                $(this).css('border', '2px dotted #0B85A1');
-                e.preventDefault();
-                var files = e.originalEvent.dataTransfer.files;
-                handleFileUpload(files, obj);
-            });
-            $(document).on('dragenter', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
-            $(document).on('dragover', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-                obj.css('border', '2px dotted #0B85A1');
-            });
-            $(document).on('drop', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
-
-        });
-
-        function file_upload() {
-            $('#error').hide();
-            $('#message').hide();
-            $('#card').hide();
-            $('#loading').show();
-            // フォームデータを取得
-            var formdata = new FormData($('#my_form').get(0));
-
-            // POSTでアップロード
-            $.ajax({
-                url: "up2.php",
-                type: "POST",
-                data: formdata,
-                cache: false,
-                contentType: false,
-                processData: false,
-                dataType: "text"
-            })
-                .done(function (data, textStatus, jqXHR) {
-
-                    $('#result').empty();
-                    $("#status").remove();
-                    var obj = $.parseJSON(data);
-                    console.log(data);
-                    var add_contents = '';
-                    if (obj.data !== undefined) {
-                        $.each(obj.data,
-                            function (index, val) {
-                                add_contents += '<p>' + val.trans + '</p>';
-                            }
-                        );
-                        $("#result").prepend("<h5>" + obj.filename + "</h5>");
-                        $('#result').append(add_contents);
-                        $('#card').show();
-                    } 
-                    if (obj.message !== undefined) {
-                        $("#message").html(obj.message);
-                        $('#message').show();
-                    }
-                    if (obj.error !== undefined) {
-                        $("#error").html(obj.error);
-                        $('#error').show();
-                    }
-                    $('#loading').hide();
-                    
-                })
-                .fail(function (jqXHR, textStatus, errorThrown) {
-                    alert("fail");
-                });
-        }
-    </script>
+    <script src="js/upload.js"></script>
 </head>
 
 <body>
     <div class="wrap">
         <div class="bs-component">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">mp3toChinese (0.90β)</a>
+                <a class="navbar-brand" href="#">mp3toChinese (0.92β)</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
                     aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -181,6 +44,9 @@
                             <a class="nav-link"
                                 href="http://hanyujiaocai.jinkan.kyoto-u.ac.jp/2017beijing/2017CALL/index1.html">CALL教材</a>
                         </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="#">USAGE</a>
+                            </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">LINK</a>
                         </li>
@@ -198,13 +64,12 @@
                 <div id="dragandrophandler">drop mp3 file here.</div>
                 <p>or</p>
 
-                <form id="my_form">
+                <form id="file_select">
                     <input type="file" name="file">
-                    <button type="button" onclick="file_upload()">アップロード</button>
+                    <button type="button" onclick="file_upload()">Upload</button>
                 </form>
                 <br>
                 <div id="status"></div>
-                <!-- <div id="for_sm"></div> -->
 
                 <div class="alert alert-secondary alert-dismissible" role="alert" id="loading" style="display:none">
                     <div class="spinner-border spinner-border-sm text-secondary" role="status">
@@ -233,15 +98,12 @@
 
         </div>
     </div>
-    <!--container close-->
+
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
         integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
         crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
-        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
-        crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 
 </html>
