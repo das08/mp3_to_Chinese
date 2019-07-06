@@ -18,6 +18,71 @@
             margin-bottom: 10px;
             font-size: 200%;
         }
+
+        .md-radio {
+            margin: 16px 0;
+            margin-top: -10px;
+        }
+
+        .md-radio.md-radio-inline {
+            display: inline-block;
+        }
+
+        .md-radio input[type="radio"] {
+            display: none;
+        }
+
+        .md-radio input[type="radio"]:checked+label:before {
+            border-color: #337ab7;
+            animation: ripple 0.2s linear forwards;
+        }
+
+        .md-radio input[type="radio"]:checked+label:after {
+            transform: scale(1);
+        }
+
+        .md-radio label {
+            display: inline-block;
+            height: 20px;
+            position: relative;
+            padding: 0 30px;
+            margin-bottom: 0;
+            cursor: pointer;
+            vertical-align: bottom;
+        }
+
+        .md-radio label:before,
+        .md-radio label:after {
+            position: absolute;
+            content: '';
+            border-radius: 50%;
+            transition: all .3s ease;
+            transition-property: transform, border-color;
+        }
+
+        .md-radio label:before {
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 0, 0, 0.54);
+        }
+
+        .md-radio label:after {
+            top: 5px;
+            left: 5px;
+            width: 10px;
+            height: 10px;
+            transform: scale(0);
+            background: #337ab7;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
         .wrap {
             overflow: hidden;
         }
@@ -29,7 +94,7 @@
     <div class="wrap">
         <div class="bs-component">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">mp3toChinese (0.92β)</a>
+                <a class="navbar-brand" href="#">mp3toChinese (0.98β)</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
                     aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -45,8 +110,8 @@
                                 href="http://hanyujiaocai.jinkan.kyoto-u.ac.jp/2017beijing/2017CALL/index1.html">CALL教材</a>
                         </li>
                         <li class="nav-item">
-                                <a class="nav-link" href="#">USAGE</a>
-                            </li>
+                            <a class="nav-link" href="#">USAGE</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">LINK</a>
                         </li>
@@ -61,6 +126,18 @@
                 <h3>チャイ語CALL教材用</h3>
                 <h3>mp3文字起こしツール</h3>
                 <p>(note)Download mp3 files from CALL website.</p>
+                <form id="band_select">
+                    <div class="md-radio md-radio-inline">
+                        <input id="Narrow" type="radio" name="band" value="Narrow" checked="checked">
+                        <label for="Narrow">Narrow Band</label>
+                    </div>
+                    <div class="md-radio md-radio-inline">
+                        <input id="Broad" type="radio" name="band" value="Broad">
+                        <label for="Broad">Broad Band</label>
+                    </div>
+                </form>
+
+
                 <div id="dragandrophandler">drop mp3 file here.</div>
                 <p>or</p>
 

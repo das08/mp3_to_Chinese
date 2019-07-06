@@ -14,7 +14,7 @@ function sendFileToServer(formData, status) {
         data: formData,
 
         success: function (data) {
-            
+
             $('#result').empty();
             $("#status").remove();
             var obj = $.parseJSON(data);
@@ -29,10 +29,13 @@ function sendFileToServer(formData, status) {
                 $("#result").prepend("<h5>" + obj.filename + "</h5>");
                 $('#result').append(add_contents);
                 $('#card').show();
-            } 
+            }
             if (obj.message !== undefined) {
                 $("#message").html(obj.message);
                 $('#message').show();
+            }
+            if (obj.confidence !== undefined) {
+                $('#result').append("<h6 class='card-text'>confidence(0-1):" + obj.confidence + "</h6>");
             }
             if (obj.error !== undefined) {
                 $("#error").html(obj.error);
@@ -43,9 +46,11 @@ function sendFileToServer(formData, status) {
     });
 }
 function handleFileUpload(files, obj) {
-        var fd = new FormData();
-        fd.append('file', files[0]);
-        sendFileToServer(fd, status);
+    var fd = new FormData();
+    var bandType = $('input[name="band"]:checked').val();
+    fd.append('file', files[0]);
+    fd.append('bandType', bandType);
+    sendFileToServer(fd, status);
 }
 $(document).ready(function () {
     var obj = $("#dragandrophandler");
@@ -88,7 +93,8 @@ function file_upload() {
     $('#loading').show();
     // フォームデータを取得
     var formdata = new FormData($('#file_select').get(0));
-
+    var bandType = $('input[name="band"]:checked').val();
+    formdata.append('bandType', bandType);
     // POSTでアップロード
     $.ajax({
         url: "up2.php",
@@ -115,17 +121,20 @@ function file_upload() {
                 $("#result").prepend("<h5>" + obj.filename + "</h5>");
                 $('#result').append(add_contents);
                 $('#card').show();
-            } 
+            }
             if (obj.message !== undefined) {
                 $("#message").html(obj.message);
                 $('#message').show();
+            }
+            if (obj.confidence !== undefined) {
+                $('#result').append("<h6 class='card-text'>confidence(0-1):" + obj.confidence + "</h6>");
             }
             if (obj.error !== undefined) {
                 $("#error").html(obj.error);
                 $('#error').show();
             }
             $('#loading').hide();
-            
+
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             alert("fail");
