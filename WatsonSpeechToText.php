@@ -5,16 +5,27 @@
 define("WTS_BASE_URL",    "https://stream.watsonplatform.net");
 define("WTS_SERVICE",     "/speech-to-text");
 define("WTS_VERSION",     "/api/v1/recognize");
-define("WTS_NARROW_BAND", "ja-JP_NarrowbandModel");
-define("WTS_BROAD_BAND",  "ja-JP_BroadbandModel");
-define("WTS_REQUEST_URL", "https://stream.watsonplatform.net/speech-to-text/api/v1/recognize?model=zh-CN_BroadbandModel");
-function Speech_to_Text($audioFile, $audioType) {
+define("WTS_NARROW_BAND", "zh-CN_NarrowbandModel");
+define("WTS_BROAD_BAND",  "zh-CN_BroadbandModel");
+define("WTS_REQUEST_URL", WTS_BASE_URL.WTS_SERVICE.WTS_VERSION."?model=");
+function Speech_to_Text($audioFile, $audioType, $bandModel) {
     $user = "apikey";
+    $APIkey = "{apikey is placed here}";
     $size = filesize($audioFile);
     $data = file_get_contents($audioFile);
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, WTS_REQUEST_URL);
-    curl_setopt($ch, CURLOPT_USERPWD, "apikey:***");
+    switch ($bandModel) {
+        case 'Narrow':
+            curl_setopt($ch, CURLOPT_URL, WTS_REQUEST_URL.WTS_NARROW_BAND);
+            break;
+        case 'Broad':
+            curl_setopt($ch, CURLOPT_URL, WTS_REQUEST_URL.WTS_BROAD_BAND);
+            break;
+        default:
+            curl_setopt($ch, CURLOPT_URL, WTS_REQUEST_URL.WTS_BROAD_BAND);
+            break;
+    }
+    curl_setopt($ch, CURLOPT_USERPWD, "apikey:".$APIkey);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         "Content-Type: $audioType",
         "Transfer-Encoding: chunked"
